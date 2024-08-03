@@ -342,32 +342,22 @@ module.exports = {
 
     return api.sendMessage(messageText.trim(), threadID);
     } else if (query === "top") {
-      const sortedGuilds = Object.entries(guildData)
-    .sort((a, b) => b[1].money - a[1].money) // Urutkan guild berdasarkan uang
-    .slice(0, 8); // Ambil 8 guild teratas
+        const sortedGuilds = Object.entries(guildData)
+    .sort((a, b) => b[1].money - a[1].money)
+    .slice(0, 8);
 
-  if (sortedGuilds.length === 0) {
-    return api.sendMessage("Tidak ada guild yang tersedia saat ini.", threadID);
+       if (sortedGuilds.length === 0) {
+        return api.sendMessage("Tidak ada guild yang tersedia saat ini.", threadID);
   }
 
-       const page = parseInt(args[1], 10) || 1;
-       const pageSize = 8;
-       const totalPages = Math.ceil(sortedGuilds.length / pageSize);
-
-        if (page < 1 || page > totalPages) {
-    return api.sendMessage(`Halaman tidak valid. Total halaman: ${totalPages}`, threadID);
-  }
-
-       const startIndex = (page - 1) * pageSize;
-       const endIndex = startIndex + pageSize;
-       const guildsOnPage = sortedGuilds.slice(startIndex, endIndex);
-        let messageText = `🔝 Top Guilds (Halaman ${page}/${totalPages}):\n`;
-  guildsOnPage.forEach(([guildName, guild]) => {
+       let messageText = `🔝 Top 8 Guild Teratas:\n`;
+  sortedGuilds.forEach(([guildName, guild]) => {
     messageText += `${guildName} (ID: ${guild.id}, Uang: ${guild.money})\n`;
   });
 
-      return api.sendMessage(messageText.trim(), threadID);
-}        
+       return api.sendMessage(messageText.trim(), threadID);
+}
+        
 
     return api.sendMessage(`Perintah yang kamu masukan tidak ada bwang^^. Gunakan\n\n${module.exports.config.guide.en}`, threadID);
   }
