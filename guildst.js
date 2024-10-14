@@ -96,7 +96,7 @@ module.exports = {
     if (args[0] == "list") {
       if (guildData.length === 0) return message.reply("Belum ada guild yang dibuat.");
       const guildInfoList = guildData.map((index => guildData.length - index - 1));
-      const adminName = await usersData.getName(guildInfo.guildAdmin);
+      const adminName = await usersData.getName(guildInfoList.guildAdmin);
       const guildList = `Nama: ${guildInfoList.guildName}\nID: ${guildInfoList.guildID}\nAdmin: ${adminName}\nJumlah Anggota: ${guildInfoList.guildMember.length}`;
       return message.reply(`Daftar Guild:\n${guildList.join("\n\n")}`);
     }
