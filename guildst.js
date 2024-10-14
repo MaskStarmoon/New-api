@@ -17,7 +17,7 @@ module.exports = {
     const threadID = event.threadID;
 
     if (args[0] == "buat") {
-      const guildName = args.slice(0, 12);
+      const guildName = args.slice(1).join(" ");
       const userdata = await usersData.get(senderID);
       const money = userdata.money;
       const exp = userdata.exp;
@@ -26,7 +26,7 @@ module.exports = {
         message.reply("Kamu tidak memiliki uang dan exp yang cukup untuk membuat guild.");
       } else {
         if (!guildInfo) {
-      if (!guildName || guildName < 12) return message.reply("Masukkan nama guild dan nama harus 12 huruf.");
+      if (!guildName || guildName.length < 12) return message.reply("Masukkan nama guild dan nama harus 12 huruf.");
       const guildID = guildData.length + 1;
       const newGuild = {
         guildAdmin: senderID,
@@ -95,11 +95,10 @@ module.exports = {
     }
     if (args[0] == "list") {
       if (guildData.length === 0) return message.reply("Belum ada guild yang dibuat.");
-      const guildInfoList = guildData.map((item, index => item.guildID - index - 1));
-      const adminID = guildInfoList.item.guildAdmin;
-      const adminName = await usersData.getName(adminID);
-      const guildList = `Nama: ${guildInfoList.item.guildName}\nID: ${guildInfoList.item.guildID}\nAdmin: ${adminName}\nJumlah Anggota: ${guildInfoList.item.guildMember.length}`;
-      return message.reply(`Daftar Guild:\n${guildList.join("\n\n")}`);
+      const guildInfoList = guildData.map( async (item, index) =>
+        `${index + 1}: ${item.guildName} (ID: ${item.guildID})\nAdmin: ${await usersData.getName(item.guildAdmin)}`
+      );
+      return message.reply(`Daftar Guild:\n${guildInfoList.join("\n\n")}`);
     }
       if (args[0] == "kick") {
         const guildInfo = guildData.find(item => item.guildAdmin == senderID);
