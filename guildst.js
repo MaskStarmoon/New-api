@@ -95,10 +95,10 @@ module.exports = {
     }
     if (args[0] == "list") {
       if (guildData.length === 0) return message.reply("Belum ada guild yang dibuat.");
-      const guildInfoList = guildData.map((index => guildData.length - index - 1));
-      const adminID = guildInfoList.guildAdmin;
+      const guildInfoList = guildData.map((item, index => item.guildID - index - 1));
+      const adminID = guildInfoList.item.guildAdmin;
       const adminName = await usersData.getName(adminID);
-      const guildList = `Nama: ${guildInfoList.guildName}\nID: ${guildInfoList.guildID}\nAdmin: ${adminName}\nJumlah Anggota: ${guildInfoList.guildMember.length}`;
+      const guildList = `Nama: ${guildInfoList.item.guildName}\nID: ${guildInfoList.item.guildID}\nAdmin: ${adminName}\nJumlah Anggota: ${guildInfoList.item.guildMember.length}`;
       return message.reply(`Daftar Guild:\n${guildList.join("\n\n")}`);
     }
       if (args[0] == "kick") {
