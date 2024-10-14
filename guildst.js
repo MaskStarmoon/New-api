@@ -95,10 +95,19 @@ module.exports = {
     }
     if (args[0] == "list") {
       if (guildData.length === 0) return message.reply("Belum ada guild yang dibuat.");
-      const guildInfoList = guildData.map( async (item, index) =>
-        `${index + 1}: ${item.guildName} (ID: ${item.guildID})\nAdmin: ${await usersData.getName(item.guildAdmin)}`
-      );
-      return message.reply(`Daftar Guild:\n${guildInfoList.join("\n\n")}`);
+      const guildInfoList = await Promise.all(
+      guildData.map(async (item, index) => {
+      let adminName;
+      try {
+        adminName = await usersData.getName(item.guildAdmin);
+        if (!adminName) adminName = "Tidak Ditemukan"; // Penanganan jika nama admin undefined
+      } catch (error) {
+        adminName = "Tidak Ditemukan"; // Penanganan jika terjadi error
+      }
+      return `${index + 1}: ${item.guildName} (ID: ${item.guildID})\n Admin: ${adminName}\n Jumlah Anggota: ${item.guildMember.length}`;
+    })
+  );
+  return message.reply(`Daftar Guild:\n${guildInfoList.join("\n\n")}`);
     }
       if (args[0] == "kick") {
         const guildInfo = guildData.find(item => item.guildAdmin == senderID);
