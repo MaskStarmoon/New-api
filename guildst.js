@@ -55,7 +55,7 @@ module.exports = {
       if (!guildInfo) return message.reply("Guild tidak ditemukan.");
       if (guildInfo.guildMember.includes(senderID)) return message.reply("Kamu sudah bergabung di guild ini.");
       const guildIn = guildData.find(item => item.guildMember.includes(senderID));
-      if (guidIn) return message.reply("Kamu sudah berada dalam guild");
+      if (guildIn) return message.reply("Kamu sudah berada dalam guild");
       guildInfo.guildMember.push(senderID);
       await usersData.set(botID, { ...list, data: { ...list.data, guild: guildData } });
       return message.reply(`Berhasil bergabung di guild "${guildInfo.guildName}".`);
@@ -95,7 +95,7 @@ module.exports = {
     }
     if (args[0] == "list") {
       if (guildData.length === 0) return message.reply("Belum ada guild yang dibuat.");
-      const guildInfoList = guildData.map((item, index => item.length - index - 1));
+      const guildInfoList = guildData.map((index => guildData.length - index - 1));
       const adminName = await usersData.getName(guildInfo.guildAdmin);
       const guildList = `Nama: ${guildInfoList.guildName}\nID: ${guildInfoList.guildID}\nAdmin: ${adminName}\nJumlah Anggota: ${guildInfoList.guildMember.length}`;
       return message.reply(`Daftar Guild:\n${guildList.join("\n\n")}`);
