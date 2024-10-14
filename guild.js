@@ -2,7 +2,7 @@ module.exports = {
   config: {
     name: "nya",
     version: "1.4.5",
-    author: "Luxion",
+    author: "Saveng Fox",
     countDown: 5,
     role: 0,
     shortDescription: "nya.",
