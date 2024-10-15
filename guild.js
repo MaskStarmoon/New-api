@@ -29,9 +29,9 @@ module.exports = {
       const userGuild = guildData.find(guild => guild.guildMember.includes(senderID));
       //const adminID = userGuild.guildAdmin;
       if (!userGuild) return;
-      userGuild.guildMoney += 0.15;
-      userGuild.guildExp += 0.15;
-      await usersData.set(botID, { ...guildData, data: { guild: guildData } });
+      const guildMoney = userGuild.money + 0.15;
+      const guildExp = userGuild.exp + 0.15;
+      await usersData.set(botID, { ...guildData, data: { guild:  } });
       //api.sendMessage(
        // `Guild "${userGuild.guildName}" mendapatkan tambahan 0.12 EXP dan Money dari member ${await usersData.getName(senderID)}.`,
         //adminID
