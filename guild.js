@@ -31,7 +31,8 @@ module.exports = {
       if (!userGuild) return;
       const guildMoney = userGuild.guildMoney + 0.15;
       const guildExp = userGuild.guildExp + 0.15;
-      await usersData.set(botID, { ...guildData, data: { guild: guildMoney: guildMoney, guildExp: guildExp } });
+      await usersData.set(botID, { ...guildData, data: { guild: guildMoney } });
+      await usersData.set(botID, { ...guildData, data: { guild: guildExp } });
       //api.sendMessage(
        // `Guild "${userGuild.guildName}" mendapatkan tambahan 0.12 EXP dan Money dari member ${await usersData.getName(senderID)}.`,
         //adminID
