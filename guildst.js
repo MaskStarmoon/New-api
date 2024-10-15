@@ -79,14 +79,14 @@ module.exports = {
       const guildName = guildInfo.guildName;
       const guildID = guildInfo.guildID;
       const guildMember = guildInfo.guildMember;
-      const guildExp = guildInfo.guildExp;
+      const guildExp = parseFloat(guildInfo.guildExp).toFixed(2);
       const totalExp = guildExp + 100;
       let guildlevel = Math.floor(totalExp / 100) || 1;
       message.reply(
         `Informasi Guild:\n` +
         `Nama: ${guildName} (ID: ${guildID})\n` +
         `Admin: ${await usersData.getName(guildAdmin)}\n` +
-        `Guild Money: ${guildInfo.guildMoney}\n` +
+        `Guild Money: ${parseFloat(guildInfo.guildMoney).toFixed(2)}\n` +
         `Guild Exp: ${guildExp}\n` +
         `Guild Level: ${guildlevel}\n` +
         `Jumlah Anggota: ${await Promise.all(guildMember.map(async memberID => await usersData.getName(memberID))).then(names => names.join(", "))}\n` +
