@@ -25,18 +25,18 @@ module.exports = {
       await usersData.set(senderID, { money: userMoney + 0.12 });
       const userExp = await usersData.get(senderID, "exp");
       await usersData.set(senderID, { exp: userExp + 0.12 });
-      const guildData = (await usersData.get(botID, "guild")).data.guild || [];
+      const list = await usersData.get(botID);
+      const guildData = list.data.guild || [];
       const userGuild = guildData.find(guild => guild.guildMember.includes(senderID));
-      //const adminID = userGuild.guildAdmin;
       if (!userGuild) return;
-      const guildMoney = userGuild.guildMoney + 0.15;
-      const guildExp = userGuild.guildExp + 0.15;
-      await usersData.set(botID, { ...guildData, data: { guild: guildMoney } });
-      await usersData.set(botID, { ...guildData, data: { guild: guildExp } });
-      //api.sendMessage(
-       // `Guild "${userGuild.guildName}" mendapatkan tambahan 0.12 EXP dan Money dari member ${await usersData.getName(senderID)}.`,
-        //adminID
-      //);
+      userGuild.guildMoney += 0.15;
+      userGuild.guildExp += 0.15;
+      await usersData.set(botID, { ...list, data: { ...list.data, guild: guildData } });
+      // const adminID = userGuild.guildAdmin;
+      // api.sendMessage(
+      //   `Guild "${userGuild.guildName}" mendapatkan tambahan 0.15 EXP dan Money dari member ${await usersData.getName(senderID)}.`,
+      //   adminID
+      // );
     }
   }
 };
