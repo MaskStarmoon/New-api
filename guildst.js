@@ -100,9 +100,9 @@ module.exports = {
       let adminName;
       try {
         adminName = await usersData.getName(item.guildAdmin);
-        if (!adminName) adminName = "Tidak Ditemukan"; // Penanganan jika nama admin undefined
+        if (!adminName) adminName = "Tidak Ditemukan";
       } catch (error) {
-        adminName = "Tidak Ditemukan"; // Penanganan jika terjadi error
+        adminName = "Tidak Ditemukan";
       }
       return `${index + 1}: ${item.guildName} (ID: ${item.guildID})\n Admin: ${adminName}\n Jumlah Anggota: ${item.guildMember.length}`;
     })
@@ -182,6 +182,15 @@ module.exports = {
         await usersData.set(botID, { ...list, data: { ...list.data, guild: guildData } });
         return message.reply(`Guild "${attackingGuild.guildName}" kalah dalam war dan gagal merebut base di "${targetBaseID}".`);
       }
+    }
+    if (args[0] == "rename") {
+  const guildInfo = guildData.find(item => item.guildAdmin == senderID);
+  if (!guildInfo) return message.reply("Kamu bukan admin guild atau tidak tergabung di guild manapun.");
+  const newGuildName = args.slice(1).join(" ");
+  if (!newGuildName || newGuildName.length < 12) return message.reply("Nama guild harus minimal 12 karakter. Silakan coba lagi.");
+  guildInfo.guildName = newGuildName;
+  await usersData.set(botID, { ...list, data: { ...list.data, guild: guildData } });
+  message.reply(`Nama guild berhasil diubah menjadi "${newGuildName}".`);
     }
     if (args[0] == "help") return message.reply("Informasi fitur guild:\n\n" +
                                                "Buat guild: .guild buat <nama guild>\n" +
