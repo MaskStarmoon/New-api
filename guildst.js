@@ -206,6 +206,7 @@ module.exports = {
   await usersData.set(botID, { ...list, data: { ...list.data, guild: guildData } });
   message.reply(`Nama guild berhasil diubah menjadi "${newGuildName}".`);
       }
+    }
     if (args[0] == "help") return message.reply("Informasi fitur guild:\n\n" +
                                                "Buat guild: .guild buat <nama guild>\n" +
                                                "Gabung guild: .guild gabung <ID guild>\n" +
