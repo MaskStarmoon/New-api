@@ -5,7 +5,7 @@ module.exports = {
   config: {
     name: "ara",
     aliases: [],
-    version: 2.5.0,
+    version: "2.5.0",
     author: "I M Range", // don't change this author claim by I M Range
     shortDescription: "ask to gemini AI ( modification brain AI )",
     role: 0,
