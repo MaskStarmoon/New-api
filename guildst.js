@@ -2,7 +2,7 @@ const COOLDOWN_TIME = 2 * 60 * 60 * 1000;
 module.exports = {
   config: {
     name: "guild",
-    version: "2.0.0",
+    version: "2.0.5",
     author: "Hadi X Veng",
     cooldown: 10,
     role: 0,
@@ -26,7 +26,7 @@ module.exports = {
         message.reply("Kamu tidak memiliki uang dan exp yang cukup untuk membuat guild.");
       } else {
         if (!guildInfo) {
-      if (!guildName || guildName.length < 12) return message.reply("Masukkan nama guild dan nama harus 12 huruf.");
+      if (!guildName || guildName.length > 12) return message.reply("Masukkan nama guild dan nama maximal harus 12 huruf.");
       const guildID = guildData.length + 1;
       const newGuild = {
         guildAdmin: senderID,
@@ -61,6 +61,14 @@ module.exports = {
       return message.reply(`Berhasil bergabung di guild "${guildInfo.guildName}".`);
     }
     if (args[0] == "keluar") {
+      const data = await usersData.get(senderID);
+      const userMoney = data.money;
+      const userExp = data.exp;
+      if (userMoney < 10 || userExp < 200) {
+        message.reply("Maaf kamu tidak bisa keluar guild untuk saat ini money atau exp mu tidak memenuhi syarat");
+      } else {
+        await usersData.set(senderID, { money: userMoney - 10 });
+        await usersData.set(senderID, { money: userExp - 200 });
       const guildInfo = guildData.find(item => item.guildMember.includes(senderID));
       if (!guildInfo) return message.reply("Kamu tidak tergabung di guild manapun.");
       const memberIndex = guildInfo.guildMember.indexOf(senderID);
@@ -68,6 +76,7 @@ module.exports = {
       guildInfo.guildMember.splice(memberIndex, 1);
       await usersData.set(botID, { ...list, data: { ...list.data, guild: guildData } });
       message.reply(`Berhasil keluar dari guild "${guildInfo.guildName}".`);
+      }
     }
     if (args[0] == "info") {
       const guildInfo = guildData.find(item => item.guildMember.includes(senderID));
@@ -187,11 +196,16 @@ module.exports = {
   const guildInfo = guildData.find(item => item.guildAdmin == senderID);
   if (!guildInfo) return message.reply("Kamu bukan admin guild atau tidak tergabung di guild manapun.");
   const newGuildName = args.slice(1).join(" ");
-  if (!newGuildName || newGuildName.length < 12) return message.reply("Nama guild harus minimal 12 karakter. Silakan coba lagi.");
+  if (!newGuildName || newGuildName.length < 12) return message.reply("Nama guild maximal 12 karakter. Silakan coba lagi.");
   guildInfo.guildName = newGuildName;
+  const moneyGuild = guildInfo.guildMoney;
+      if(moneyGuild < 100) {
+        message.reply("Uang guild mu kurang");
+      } else {
+        moneyGuild -= 100;
   await usersData.set(botID, { ...list, data: { ...list.data, guild: guildData } });
   message.reply(`Nama guild berhasil diubah menjadi "${newGuildName}".`);
-    }
+      }
     if (args[0] == "help") return message.reply("Informasi fitur guild:\n\n" +
                                                "Buat guild: .guild buat <nama guild>\n" +
                                                "Gabung guild: .guild gabung <ID guild>\n" +
@@ -201,6 +215,7 @@ module.exports = {
                                                "Kick guild: .guild kick <ID anggota> (Hanya admin guild)\n" +
                                                "Tetapkan base guild: .guild c-base (Hanya admin guild)\n" +
                                                "War guild: .guild war <ID base> (Hanya admin guild)\n" +
+                                                "Guild rename: .guild rename <nama> ( Hanya admin guild )\n" +
                                                "Help guild: .guild help (list fitur)");
     if (args[0] == "bubarkan") {
       const guildInfo = guildData.find(item => item.guildAdmin == senderID);
