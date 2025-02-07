@@ -78,9 +78,7 @@ module.exports = {
     const action = args[0]; // "create" atau "join"
     const partyName = args.slice(1).join(" ");
 
-    const data = await getData(userID); // Ambil data pengguna
-    if (!data.charDDW) data.charDDW = {}; // Pastikan objek ada
-
+    const data = await getData(userID);
     if (action === "create") {
         if (partyName.length > 10) return api.sendMessage("Nama party terlalu panjang.", event.threadID, event.messageID);
         if (data.charDDW[userID]) return api.sendMessage("Kamu sudah memiliki party yang aktif.", event.threadID, event.messageID);
