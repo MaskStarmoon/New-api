@@ -9,6 +9,7 @@ const axios = require("axios").create({
 const fontPath = "./hady-zen/asset/ShortBaby.ttf";
 const filePath = "./hady-zen/asset/status_ddw.png";
 const fontUrl = "https://cdn.glitch.global/879acb21-cf87-407e-9394-5807551d147b/ShortBaby.ttf?v=1738030514024";
+const { awalan } = global.config;
 
 module.exports = { 
   config: { 
@@ -75,8 +76,8 @@ module.exports = {
 
     // 3. Membuat party sementara
     else if (awal === pilih[2]) {
-    const action = args[0]; // "create" atau "join"
-    const partyName = args.slice(1).join(" ");
+    const action = args[1];
+    const partyName = args.slice(2).join(" ");
 
     const data = await getData(userID);
     if (action === "create") {
@@ -126,7 +127,7 @@ module.exports = {
     } 
 
     else {
-        return api.sendMessage("Gunakan perintah:\n- `!party create [nama]` untuk membuat party\n- `!party join [nama]` untuk bergabung ke party", event.threadID, event.messageID);
+        return api.sendMessage(`Gunakan perintah:\n- `${awalan}ddw party create [nama]` untuk membuat party\n- `!{awalan}ddw party join [nama]` untuk bergabung ke party`, event.threadID, event.messageID);
     }
 }
 
