@@ -127,7 +127,7 @@ module.exports = {
     } 
 
     else {
-        return api.sendMessage(`Gunakan perintah:\n- `${awalan}ddw party create [nama]` untuk membuat party\n- `!{awalan}ddw party join [nama]` untuk bergabung ke party`, event.threadID, event.messageID);
+        return api.sendMessage(`Gunakan perintah:\n- ${awalan}ddw party create [nama] untuk membuat party\n- ${awalan}ddw party join [nama] untuk bergabung ke party`, event.threadID, event.messageID);
     }
 }
 
