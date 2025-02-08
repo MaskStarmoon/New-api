@@ -1,4 +1,3 @@
-ini code ddw.js, jangan ubah apapun dulu!,
 const { createCanvas, loadImage, registerFont } = require("canvas");
 const fs = require('fs');
 const axios = require("axios").create({
@@ -26,7 +25,6 @@ module.exports = {
     const isAdmin = global.config.admin.includes(userID);
     let userData = await getData(userID);
     const pilih = ["buat", "leveling", "party", "pvp", "dungeon", "status", "top"];
-  		if (!userData.charDDW) return api.sendMessage("Daftarkan diri mu untuk bergabung ke dunia ini!, Gunakan /ddw buat", event.threadID, event.messageID);
       
     // 1. Buat karakter dan pilih class
     if (awal === pilih[0]) {
@@ -97,7 +95,7 @@ module.exports = {
 
         // Party otomatis dihapus setelah 1 jam (3600000 ms)
         setTimeout(async () => {
-            const updatedData = await getData(userID) || {};
+            const updatedData = await getData(userID);
             delete updatedData.charDDW[userID];
             await setData(userID, updatedData);
             api.sendMessage(`Party "${partyName}" telah dibubarkan setelah 1 jam.`, event.threadID);
@@ -105,26 +103,32 @@ module.exports = {
     } 
 
     else if (action === "join") {
-        if (!partyName) return api.sendMessage("Masukkan nama party yang ingin kamu gabung.", event.threadID, event.messageID);
+    if (!partyName) return api.sendMessage("Masukkan nama party yang ingin kamu gabung.", event.threadID, event.messageID);
 
-        const allData = await getAllData();
-        let foundParty = null;
+    const allData = await getAllData();
+    let foundParty = null;
 
-        for (const user in allData) {
-            if (allData[user].charDDW && allData[user].charDDW[user].partyName === partyName) {
-                foundParty = allData[user].charDDW[user];
-                break;
+    for (const user in allData) {
+        if (allData[user].charDDW) {
+            for (const key in allData[user].charDDW) {
+                const party = allData[user].charDDW[key];
+                if (party.partyName === partyName) {
+                    foundParty = party;
+                    break;
+                }
             }
         }
+        if (foundParty) break;
+    }
 
-        if (!foundParty) return api.sendMessage("Party tidak ditemukan!", event.threadID, event.messageID);
-        if (foundParty.members.length >= 4) return api.sendMessage("Party sudah penuh!", event.threadID, event.messageID);
+    if (!foundParty) return api.sendMessage("Party tidak ditemukan!", event.threadID, event.messageID);
+    if (foundParty.members.length >= 4) return api.sendMessage("Party sudah penuh!", event.threadID, event.messageID);
 
-        foundParty.members.push(userID);
-        await setData(foundParty.leader, { charDDW: { [foundParty.leader]: foundParty } });
+    foundParty.members.push(userID);
+    await setData(foundParty.leader, { charDDW: { [foundParty.leader]: foundParty } });
 
-        return api.sendMessage(`Kamu berhasil bergabung dengan party "${partyName}"!`, event.threadID, event.messageID);
-    } 
+    return api.sendMessage(`Kamu berhasil bergabung dengan party "${partyName}"!`, event.threadID, event.messageID);
+}
 
     else {
         return api.sendMessage(`Gunakan perintah:\n- ${awalan}ddw party create [nama] untuk membuat party\n- ${awalan}ddw party join [nama] untuk bergabung ke party`, event.threadID, event.messageID);
@@ -142,11 +146,41 @@ module.exports = {
 
     // 5. Memasuki Dungeon
     else if (awal === pilih[4]) {
-      return api.sendMessage(
-        "Fitur Dungeon belum tersedia, tetapi akan segera hadir!", 
-        event.threadID, event.messageID
-      );
+    const dungeonName = args[1];
+    if (!dungeonName) return api.sendMessage("Masukkan nama dungeon yang ingin kamu masuki.", event.threadID, event.messageID);
+
+    const userData = await getData(userID);
+    if (!userData.charDDW || !userData.charDDW[userID]) {
+        return api.sendMessage("Kamu harus berada dalam party untuk masuk dungeon!", event.threadID, event.messageID);
     }
+
+    const allData = await getAllData();
+    if (!global.dungeonSessions) global.dungeonSessions = {};
+
+    if (global.dungeonSessions[dungeonName]) {
+        const dungeon = global.dungeonSessions[dungeonName];
+
+        if (dungeon.isActive) return api.sendMessage("Dungeon sedang berlangsung, tunggu sesi berikutnya!", event.threadID, event.messageID);
+
+        if (dungeon.totalPlayers < 20) {
+            dungeon.parties.push(userData.charDDW[userID]);
+            dungeon.totalPlayers += userData.charDDW[userID].members.length;
+            return api.sendMessage(`Party "${userData.charDDW[userID].partyName}" berhasil masuk ke dungeon "${dungeonName}"!`, event.threadID, event.messageID);
+        } else {
+            return api.sendMessage("Dungeon sudah penuh! Tunggu sesi berikutnya.", event.threadID, event.messageID);
+        }
+    }
+
+    global.dungeonSessions[dungeonName] = {
+        parties: [userData.charDDW[userID]], 
+        totalPlayers: userData.charDDW[userID].members.length,
+        isActive: false
+    };
+
+    api.sendMessage(`Dungeon "${dungeonName}" dibuat dan party "${userData.charDDW[userID].partyName}" telah masuk!`, event.threadID, event.messageID);
+
+    setTimeout(() => startDungeon(dungeonName), 30000);
+}
 
     // 6. Menampilkan status karakter pengguna
     else if (awal === pilih[5]) {
@@ -155,7 +189,7 @@ module.exports = {
       const totalExp = exp + 100;
       let level = Math.floor(totalExp / 100);
       
-      if (args[1] === "text") { return api.sendMessage(`📊Status Karakter\nName: ${char.charName}\nClass: ${char.charClass}\nLevel: ${level}\nExp: ${char.charExp}\nWeapon: ${char.charWeapon}\nCP: ${char.charCP}`, event.threadID, event.messageID); } else {
+      if (args[1] === "text") { return api.sendMessage(`📊Status Karakter\nName: ${char.charName}\nClass: ${char.charClass}\nLevel: ${level}\nExp: ${char.charExp}\nWeapon: ${char.charWeapon}\nCP: ${char.charCP}\nTitle: ${char.charTitle}`, event.threadID, event.messageID); } else {
 
       try {
         const background = await loadImage("https://cdn.glitch.global/879acb21-cf87-407e-9394-5807551d147b/ddwStatus.png?v=1738029799975");
@@ -241,7 +275,71 @@ module.exports = {
     .join("\n");
   api.sendMessage(`🏆 Top 10 Combat Power (CP):\n\n${topList}`, event.threadID, event.messageID);
 } else {
+  if (!userData.charDDW) return api.sendMessage("Daftarkan diri mu untuk bergabung ke dunia ini!, Gunakan /ddw buat", event.threadID, event.messageID);
     return api.sendMessage("Perintah tidak dikenali. Gunakan salah satu dari perintah berikut:\n- buat\n- leveling\n- party\n- pvp\n- dungeon\n- status\n- top", event.threadID, event.messageID);
     }
+async function startDungeon(dungeonName) {
+    const dungeon = global.dungeonSessions[dungeonName];
+    if (!dungeon || dungeon.isActive) return;
+
+    dungeon.isActive = true;
+    const partyCount = dungeon.parties.length;
+    let duration = partyCount === 5 ? 10 : Math.floor(Math.random() * (10 - 5 + 1)) + 5;
+
+    api.sendMessage(`Dungeon "${dungeonName}" telah dimulai! Waktu penyelesaian: ${duration} menit.`, event.threadID);
+
+    setTimeout(async () => {
+        completeDungeon(dungeonName);
+    }, duration * 60000);
+}
+async function completeDungeon(dungeonName) {
+    const dungeon = global.dungeonSessions[dungeonName];
+    if (!dungeon) return;
+
+    let partyStats = [];
+
+    for (const party of dungeon.parties) {
+        let totalCP = 0;
+        for (const memberID of party.members) {
+            const userData = await getData(memberID);
+            if (!userData.charDDW || !userData.charDDW.charCP) continue;
+            totalCP += userData.charDDW.charCP || 0;
+        }
+
+        partyStats.push({
+            party,
+            totalCP
+        });
+    }
+
+    // Urutkan party berdasarkan CP tertinggi
+    partyStats.sort((a, b) => b.totalCP - a.totalCP);
+
+    let expReward = Math.floor(Math.random() * (10000 - 5000 + 1)) + 5000;
+    let moneyReward = Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000;
+
+    let totalCP = partyStats.reduce((sum, p) => sum + p.totalCP, 0);
+
+    for (let i = 0; i < partyStats.length; i++) {
+        let party = partyStats[i].party;
+        let partyCP = partyStats[i].totalCP;
+
+        let expShare = Math.round((partyCP / totalCP) * expReward);
+        let moneyShare = Math.round((partyCP / totalCP) * moneyReward);
+
+        for (const memberID of party.members) {
+            const userData = await getData(memberID);
+
+            userData.charDDW.charExp = userData.charDDW.charExp + expShare;
+            userData.money = userData.money + moneyShare;
+
+            await setData(memberID, userData);
+            api.sendMessage(`Dungeon selesai! Kamu mendapat ${expShare} EXP dan ${moneyShare} uang.`, memberID);
+            api.sendMessage("Dungeon selesai!", event.threadID);
+        }
+    }
+
+    delete global.dungeonSessions[dungeonName];
+}
    }
 };
