@@ -24,6 +24,8 @@ module.exports = {
     const userID = event.senderID;
     const isAdmin = global.config.admin.includes(userID);
     let userData = await getData(userID);
+    let statusTitle = await getTitle();
+      console.log(statusTitle);
     const pilih = ["buat", "leveling", "party", "pvp", "dungeon", "status", "top"];
       
     // 1. Buat karakter dan pilih class
@@ -95,10 +97,10 @@ module.exports = {
 
         setTimeout(async () => {
             const updatedData = await getData(userID);
-            delete updatedData.charDDW[userID];
+            delete updatedData.charDDW[userID].party;
             await setData(userID, updatedData);
-            api.sendMessage(`Party "${partyName}" telah dibubarkan setelah 500 detik.`, event.threadID);
-        }, 500000);
+            api.sendMessage(`Party "${partyName}" telah dibubarkan setelah 600 detik.`, event.threadID);
+        }, 600000);
     } 
 
     else if (action === "join") {
@@ -329,7 +331,7 @@ module.exports = {
         completeDungeon(dungeonName);
     }, duration * 60000);
 }
-async function completeDungeon(dungeonName) {
+  async function completeDungeon(dungeonName) {
     const dungeon = global.dungeonSessions[dungeonName];
     if (!dungeon) return;
 
@@ -343,7 +345,7 @@ async function completeDungeon(dungeonName) {
             playerStats.push({
                 memberID,
                 CP: userData.charDDW.charCP,
-                wins: userData.charDDW.wins || 0 // Tambahkan properti wins jika belum ada
+                wins: userData.charDDW.wins || 0
             });
         }
     }
@@ -398,6 +400,32 @@ async function completeDungeon(dungeonName) {
 
     api.sendMessage("🏰 Dungeon selesai! Semua hadiah telah dibagikan.", event.threadID);
     delete global.dungeonSessions[dungeonName];
+}
+    async function getTitle() {
+    try {
+        const allUsers = await getAllData();
+        const allCharacters = Object.values(allUsers)
+            .filter(user => user.charDDW)
+            .map(user => ({
+                userID: user.userID,
+                charName: user.charDDW.charName,
+                charCP: user.charDDW.charCP
+            }));
+
+        const sortedCharacters = allCharacters.sort((a, b) => b.charCP - a.charCP);
+        const userIndex = sortedCharacters.findIndex(user => user.userID === userID);
+        const topDDW = userIndex !== -1 && userIndex < 10 ? `#${userIndex + 1}` : "Tidak masuk top";
+        const prompt = `Berikan satu title kepada user yang telah mendapatkan ${userData.charDDW.charExp} EXP dan ${userData.charDDW.charCP} Combat Power (CP) dan berada di ranking ${topDDW}, tandai title-nya dengan **.`;
+        const response = await axios.get(`https://api-rangestudio.vercel.app/api/gemini?text=${encodeURIComponent(prompt)}&maxline?=10`);
+        const fullText = response.data.answer;
+        const match = fullText.match(/\*(.*?)\*/);
+        const title = match ? match[1] : "-";
+
+        userData.charDDW.charTitle = title;
+        return await setData(userID, userData);    
+    } catch (error) {
+        console.log("Gagal mendapatkan title dari AI, menggunakan title default.", error.message);
+    }
 }
    }
 };
