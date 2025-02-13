@@ -57,7 +57,7 @@ module.exports = {
     if (!userData.charDDW) {
         // skip
       } else {
-    const levelingCost = 40;
+    const levelingCost = 100;
   	if (!userData.money || userData.money < levelingCost) return api.sendMessage(`Kamu membutuhkan ${levelingCost} uang untuk melakukan leveling. Uang kamu saat ini: ${userData.money || 0}`, event.threadID, event.messageID);
 
     const expGained = Math.floor(Math.random() * 50) + 10;
@@ -93,13 +93,12 @@ module.exports = {
         await setData(userID, data);
         api.sendMessage(`Party "${partyName}" berhasil dibuat!`, event.threadID, event.messageID);
 
-        // Party otomatis dihapus setelah 1 jam (3600000 ms)
         setTimeout(async () => {
             const updatedData = await getData(userID);
             delete updatedData.charDDW[userID];
             await setData(userID, updatedData);
-            api.sendMessage(`Party "${partyName}" telah dibubarkan setelah 1 jam.`, event.threadID);
-        }, 3600000);
+            api.sendMessage(`Party "${partyName}" telah dibubarkan setelah 500 detik.`, event.threadID);
+        }, 500000);
     } 
 
     else if (action === "join") {
@@ -112,6 +111,7 @@ module.exports = {
         if (allData[user].charDDW) {
             for (const key in allData[user].charDDW) {
                 const party = allData[user].charDDW[key];
+              if (party) return api.sendMessage("Kamu sudah punya party.", event.threadID, event.messageID)
                 if (party.partyName === partyName) {
                     foundParty = party;
                     break;
@@ -129,9 +129,26 @@ module.exports = {
 
     return api.sendMessage(`Kamu berhasil bergabung dengan party "${partyName}"!`, event.threadID, event.messageID);
 }
+      else if (action === "check") {
+        if (!data.charDDW[userID]) return api.sendMessage("Kamu tidak sedang dalam party.", event.threadID, event.messageID);
+
+        const party = data.charDDW[userID];
+        const memberList = party.members.map(id => `- ${id}`).join("\n");
+        const userInfo = await api.getUserInfo(party.leader);
+        //const membersInfo = await api.getUserInfo(memberList);
+        const nameLeader = userInfo[party.leader].name;
+
+        return api.sendMessage(
+            `📜 Status Party:\n` +
+            `Nama Party: ${party.partyName}\n` +
+            `Leader: ${nameLeader}\n` +
+            `Anggota:\n${memberList}`,
+            event.threadID, event.messageID
+        );
+    } 
 
     else {
-        return api.sendMessage(`Gunakan perintah:\n- ${awalan}ddw party create [nama] untuk membuat party\n- ${awalan}ddw party join [nama] untuk bergabung ke party`, event.threadID, event.messageID);
+        return api.sendMessage(`Gunakan perintah:\n- ${awalan}ddw party create [nama] untuk membuat party\n- ${awalan}ddw party join [nama] untuk bergabung ke party\n- ${awalan}ddw party check → cek status party`, event.threadID, event.messageID);
     }
 }
 
@@ -153,6 +170,9 @@ module.exports = {
     if (!userData.charDDW || !userData.charDDW[userID]) {
         return api.sendMessage("Kamu harus berada dalam party untuk masuk dungeon!", event.threadID, event.messageID);
     }
+      const dungeonCost = 2500;
+    if (!userData.money || userData.money < dungeonCost) return api.sendMessage(`Kamu membutuhkan ${dungeonCost} uang untuk melakukan leveling. Uang kamu saat ini: ${userData.money}`, event.threadID, event.messageID);
+
 
     const allData = await getAllData();
     if (!global.dungeonSessions) global.dungeonSessions = {};
@@ -165,6 +185,8 @@ module.exports = {
         if (dungeon.totalPlayers < 20) {
             dungeon.parties.push(userData.charDDW[userID]);
             dungeon.totalPlayers += userData.charDDW[userID].members.length;
+            userData.money -= dungeonCost;
+            await setData(userID, userData);
             return api.sendMessage(`Party "${userData.charDDW[userID].partyName}" berhasil masuk ke dungeon "${dungeonName}"!`, event.threadID, event.messageID);
         } else {
             return api.sendMessage("Dungeon sudah penuh! Tunggu sesi berikutnya.", event.threadID, event.messageID);
@@ -176,7 +198,9 @@ module.exports = {
         totalPlayers: userData.charDDW[userID].members.length,
         isActive: false
     };
-
+      
+    userData.money -= dungeonCost;
+    await setData(userID, userData);
     api.sendMessage(`Dungeon "${dungeonName}" dibuat dan party "${userData.charDDW[userID].partyName}" telah masuk!`, event.threadID, event.messageID);
 
     setTimeout(() => startDungeon(dungeonName), 30000);
@@ -275,8 +299,8 @@ module.exports = {
     .join("\n");
   api.sendMessage(`🏆 Top 10 Combat Power (CP):\n\n${topList}`, event.threadID, event.messageID);
 } else {
-  if (!userData.charDDW) return api.sendMessage("Daftarkan diri mu untuk bergabung ke dunia ini!, Gunakan /ddw buat", event.threadID, event.messageID);
-    return api.sendMessage("Perintah tidak dikenali. Gunakan salah satu dari perintah berikut:\n- buat\n- leveling\n- party\n- pvp\n- dungeon\n- status\n- top", event.threadID, event.messageID);
+  if (!userData.charDDW) { api.sendMessage("Daftarkan diri mu untuk bergabung ke dunia ini!, Gunakan /ddw buat", event.threadID, event.messageID); }
+    api.sendMessage("Perintah tidak dikenali. Gunakan salah satu dari perintah berikut:\n- buat\n- leveling\n- party\n- pvp\n- dungeon\n- status\n- top", event.threadID, event.messageID);
     }
 async function startDungeon(dungeonName) {
     const dungeon = global.dungeonSessions[dungeonName];
