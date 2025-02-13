@@ -102,33 +102,46 @@ module.exports = {
     } 
 
     else if (action === "join") {
-    if (!partyName) return api.sendMessage("Masukkan nama party yang ingin kamu gabung.", event.threadID, event.messageID);
+        if (!partyName) return api.sendMessage("Masukkan nama party yang ingin kamu gabung.", event.threadID, event.messageID);
 
-    const allData = await getAllData();
-    let foundParty = null;
+        const allData = await getAllData();
+        let foundParty = null;
+        let leaderID = null;
 
-    for (const user in allData) {
+        for (const user in allData) {
         if (allData[user].charDDW) {
             for (const key in allData[user].charDDW) {
                 const party = allData[user].charDDW[key];
-              if (party) return api.sendMessage("Kamu sudah punya party.", event.threadID, event.messageID)
+                
+                if (!party || !party.partyName) continue;
+
+                if (party.leader === userID || party.members.includes(userID)) {
+                    return api.sendMessage("Kamu sudah memiliki party dan tidak bisa bergabung ke party lain!", event.threadID, event.messageID);
+                }
                 if (party.partyName === partyName) {
                     foundParty = party;
-                    break;
+                    leaderID = user;
                 }
             }
         }
+
         if (foundParty) break;
     }
 
-    if (!foundParty) return api.sendMessage("Party tidak ditemukan!", event.threadID, event.messageID);
-    if (foundParty.members.length >= 4) return api.sendMessage("Party sudah penuh!", event.threadID, event.messageID);
+        if (!foundParty) return api.sendMessage("Party tidak ditemukan!", event.threadID, event.messageID);
+        if (foundParty.members.length >= 4) return api.sendMessage("Party sudah penuh!", event.threadID, event.messageID);
 
-    foundParty.members.push(userID);
-    await setData(foundParty.leader, { charDDW: { [foundParty.leader]: foundParty } });
+         foundParty.members.push(userID);
 
-    return api.sendMessage(`Kamu berhasil bergabung dengan party "${partyName}"!`, event.threadID, event.messageID);
-}
+        const leaderData = await getData(leaderID);
+        leaderData.charDDW[leaderID] = foundParty;
+        await setData(leaderID, leaderData);
+
+        data.charDDW[userID] = foundParty;
+        await setData(userID, data);
+
+        return api.sendMessage(`Kamu berhasil bergabung dengan party "${partyName}"!`, event.threadID, event.messageID);
+    }
       else if (action === "check") {
         if (!data.charDDW[userID]) return api.sendMessage("Kamu tidak sedang dalam party.", event.threadID, event.messageID);
 
@@ -302,7 +315,7 @@ module.exports = {
   if (!userData.charDDW) { api.sendMessage("Daftarkan diri mu untuk bergabung ke dunia ini!, Gunakan /ddw buat", event.threadID, event.messageID); }
     api.sendMessage("Perintah tidak dikenali. Gunakan salah satu dari perintah berikut:\n- buat\n- leveling\n- party\n- pvp\n- dungeon\n- status\n- top", event.threadID, event.messageID);
     }
-async function startDungeon(dungeonName) {
+    async function startDungeon(dungeonName) {
     const dungeon = global.dungeonSessions[dungeonName];
     if (!dungeon || dungeon.isActive) return;
 
@@ -320,49 +333,70 @@ async function completeDungeon(dungeonName) {
     const dungeon = global.dungeonSessions[dungeonName];
     if (!dungeon) return;
 
-    let partyStats = [];
+    let playerStats = [];
 
+    // Kumpulkan semua data CP pemain
     for (const party of dungeon.parties) {
-        let totalCP = 0;
         for (const memberID of party.members) {
             const userData = await getData(memberID);
             if (!userData.charDDW || !userData.charDDW.charCP) continue;
-            totalCP += userData.charDDW.charCP || 0;
+            playerStats.push({
+                memberID,
+                CP: userData.charDDW.charCP,
+                wins: userData.charDDW.wins || 0 // Tambahkan properti wins jika belum ada
+            });
         }
-
-        partyStats.push({
-            party,
-            totalCP
-        });
     }
 
-    // Urutkan party berdasarkan CP tertinggi
-    partyStats.sort((a, b) => b.totalCP - a.totalCP);
+    // Urutkan pemain berdasarkan CP tertinggi
+    playerStats.sort((a, b) => b.CP - a.CP);
 
+    // Penalti EXP bagi top 10 CP tertinggi
+    for (let i = 0; i < Math.min(10, playerStats.length); i++) {
+        let player = playerStats[i];
+        let penaltyExp = Math.floor((player.CP / 500) * 2000); // 2000 EXP per 500 CP
+        const userData = await getData(player.memberID);
+
+        userData.charDDW.charExp = Math.max(0, userData.charDDW.charExp - penaltyExp);
+        await setData(player.memberID, userData);
+        api.sendMessage(`⚠️ Penalti EXP: Kamu kehilangan ${penaltyExp} EXP karena berada di top 10 CP tertinggi!`, player.memberID);
+    }
+
+    // Eliminasi top 3 CP setelah menang/hidup 4–10 kali
+    for (let i = 0; i < Math.min(3, playerStats.length); i++) {
+        let player = playerStats[i];
+        const userData = await getData(player.memberID);
+
+        userData.charDDW.wins = (userData.charDDW.wins || 0) + 1;
+
+        if (userData.charDDW.wins >= Math.floor(Math.random() * (10 - 4 + 1)) + 4) {
+            userData.charDDW.isDead = true; // Tandai bahwa pemain mati
+            api.sendMessage(`💀 Kamu telah kalah karena terlalu kuat! CP terlalu tinggi dan sudah bertahan ${userData.charDDW.wins} kali.`, player.memberID);
+            userData.charDDW.wins = 0; // Reset kemenangan setelah mati
+        }
+
+        await setData(player.memberID, userData);
+    }
+
+    // Berikan reward seperti sebelumnya
     let expReward = Math.floor(Math.random() * (10000 - 5000 + 1)) + 5000;
     let moneyReward = Math.floor(Math.random() * (5000 - 1000 + 1)) + 1000;
+    
+    let totalCP = playerStats.reduce((sum, p) => sum + p.CP, 0);
 
-    let totalCP = partyStats.reduce((sum, p) => sum + p.totalCP, 0);
+    for (const player of playerStats) {
+        const userData = await getData(player.memberID);
+        let expShare = Math.round((player.CP / totalCP) * expReward);
+        let moneyShare = Math.round((player.CP / totalCP) * moneyReward);
 
-    for (let i = 0; i < partyStats.length; i++) {
-        let party = partyStats[i].party;
-        let partyCP = partyStats[i].totalCP;
+        userData.charDDW.charExp += expShare;
+        userData.money += moneyShare;
 
-        let expShare = Math.round((partyCP / totalCP) * expReward);
-        let moneyShare = Math.round((partyCP / totalCP) * moneyReward);
-
-        for (const memberID of party.members) {
-            const userData = await getData(memberID);
-
-            userData.charDDW.charExp = userData.charDDW.charExp + expShare;
-            userData.money = userData.money + moneyShare;
-
-            await setData(memberID, userData);
-            api.sendMessage(`Dungeon selesai! Kamu mendapat ${expShare} EXP dan ${moneyShare} uang.`, memberID);
-            api.sendMessage("Dungeon selesai!", event.threadID);
-        }
+        await setData(player.memberID, userData);
+        api.sendMessage(`🏆 Dungeon selesai! Kamu mendapat ${expShare} EXP dan ${moneyShare} uang.`, player.memberID);
     }
 
+    api.sendMessage("🏰 Dungeon selesai! Semua hadiah telah dibagikan.", event.threadID);
     delete global.dungeonSessions[dungeonName];
 }
    }
