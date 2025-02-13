@@ -24,7 +24,7 @@ module.exports = {
     const userID = event.senderID;
     const isAdmin = global.config.admin.includes(userID);
     let userData = await getData(userID);
-    let statusTitle = await getTitle();
+    const statusTitle = await getTitle();
       console.log(statusTitle);
     const pilih = ["buat", "leveling", "party", "pvp", "dungeon", "status", "top"];
       
@@ -417,8 +417,8 @@ module.exports = {
         const topDDW = userIndex !== -1 && userIndex < 10 ? `#${userIndex + 1}` : "Tidak masuk top";
         const prompt = `Berikan satu title kepada user yang telah mendapatkan ${userData.charDDW.charExp} EXP dan ${userData.charDDW.charCP} Combat Power (CP) dan berada di ranking ${topDDW}, tandai title-nya dengan **.`;
         const response = await axios.get(`https://api-rangestudio.vercel.app/api/gemini?text=${encodeURIComponent(prompt)}&maxline?=10`);
-        const fullText = response.data.answer;
-        const match = fullText.match(/\*(.*?)\*/);
+        const fullText = response.data.answer.trim();
+        const match = fullText.match(/\*([^*]+)\*/);
         const title = match ? match[1] : "-";
 
         userData.charDDW.charTitle = title;
