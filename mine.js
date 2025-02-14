@@ -6,7 +6,6 @@ const exchangeRatePath = path.join(__dirname, "exchangeRate.json");
 const mineDataUrl = "https://raw.githubusercontent.com/MaskStarmoon/minedata/refs/heads/main/Mine.json";
 
 let materials = [];
-
 async function mineData() {
   try {
     const { data } = await axios.get(mineDataUrl);
