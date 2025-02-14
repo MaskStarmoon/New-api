@@ -291,7 +291,7 @@ module.exports = {
           }
         }
       } else if (tipe === "money") {
-        if (jumlah < 100 || user.sdMoney < jumlah) {
+        if (jumlah < 100 || dataSD.money < jumlah) {
           message = "❌ Minimal tukar 100 SD money atau saldo SD money tidak mencukupi.";
         } else {
           let rateData = getExchangeRate();
