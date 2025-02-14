@@ -1,25 +1,20 @@
 const fs = require("fs");
 const path = require("path");
+const axios = require("axios");
 const userDataPath = path.join(__dirname, "mineData.json");
 const exchangeRatePath = path.join(__dirname, "exchangeRate.json");
+const mineDataUrl = "https://raw.githubusercontent.com/MaskStarmoon/minedata/refs/heads/main/Mine.json";
 
-// Daftar material (hasil mining)
-const materials = [
-  { id: 1, name: "Batu Biasa", emoji: "🪨", value: 10, rarity: "common" },
-  { id: 2, name: "Tanah Liat", emoji: "🏺", value: 15, rarity: "common" },
-  { id: 3, name: "Besi Tua", emoji: "🔩", value: 20, rarity: "common" },
-  { id: 4, name: "Perak Murni", emoji: "🥈", value: 50, rarity: "rare" },
-  { id: 5, name: "Kristal Kecil", emoji: "🔮", value: 75, rarity: "rare" },
-  { id: 6, name: "Amber Kuno", emoji: "🟠", value: 100, rarity: "rare" },
-  { id: 7, name: "Emas Padat", emoji: "🟡", value: 200, rarity: "epic" },
-  { id: 8, name: "Diamond Mentah", emoji: "💎", value: 500, rarity: "epic" },
-  { id: 9, name: "Meteorit", emoji: "☄️", value: 300, rarity: "epic" },
-  { id: 10, name: "Star Fragment", emoji: "🌠", value: 1000, rarity: "legendary" },
-  { id: 11, name: "Dragon Scale", emoji: "🐉", value: 1500, rarity: "legendary" },
-  { id: 12, name: "Phoenix Feather", emoji: "🔥", value: 2000, rarity: "legendary" },
-  { id: 13, name: "Ancient Relic", emoji: "🗿", value: 5000, rarity: "mythical" },
-  { id: 14, name: "Celestial Orb", emoji: "🔆", value: 8000, rarity: "mythical" }
-];
+let materials = [];
+
+async function mineData() {
+  try {
+    const { data } = await axios.get(mineDataUrl);
+    materials = data;
+  } catch (error) {
+    console.error("Gagal mengambil data mining:", error);
+  }
+}
 
 // Daftar item shop (termasuk pickaxe dan buff)
 const shopItems = [
@@ -109,6 +104,7 @@ module.exports = {
     const userId = event.senderID;
     const userData = loadUserData();
     const dataSD = await getData(userId);
+    await mineData();
     if (!userData[userId]) {
       // Inisialisasi user baru: coin 50, SD money 0, 1 Basic Pickaxe
       userData[userId] = {
@@ -334,5 +330,6 @@ module.exports = {
     }
     saveUserData(userData);
     api.sendMessage(message, event.threadID, event.messageID);
+    
   }
 };
