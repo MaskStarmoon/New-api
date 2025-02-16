@@ -1,30 +1,30 @@
 {
-  TENGEN UZUI {
-  id: "0021",
-  bint: "★★★★★",
-  harga: 30,
-  dropRate: 5,
-  card: "https://rangestudio.wuaze.com/gacha/TENGEN.png"
+  "TENGEN UZUI": {
+    "id": "0021",
+    "bint": "★★★★★",
+    "harga": 30,
+    "dropRate": 5,
+    "card": "https://rangestudio.wuaze.com/gacha/TENGEN.png"
   },
- AOI {
-   id: "0218",
-   bint: "★★★",
-   harga: 14,
-   dropRate: 80,
-   card: "https://rangestudio.wuaze.com/gacha/AOI.PNG"
- },
- DOMA ( UPPER MOON 2 ) {
-   id: "0072",
-   bint: "★★★★★",
-   harga: 30,
-   dropRate: 1,
-   card: "https://rangestudio.wuaze.com/gacha/DOMA.PNG"
- },
-   AKAZA {
-     id: "0244",
-     bint: "",
-     harga: 30,
-     dropRate: 1,
-     card: "https://rangestudio.wuaze.com/gacha/AKAZA.PNG"
-   }
+  "AOI": {
+    "id": "0218",
+    "bint": "★★★",
+    "harga": 14,
+    "dropRate": 80,
+    "card": "https://rangestudio.wuaze.com/gacha/AOI.PNG"
+  },
+  "DOMA ( UPPER MOON 2 )": {
+    "id": "0072",
+    "bint": "★★★★★",
+    "harga": 30,
+    "dropRate": 1,
+    "card": "https://rangestudio.wuaze.com/gacha/DOMA.PNG"
+  },
+  "AKAZA": {
+    "id": "0244",
+    "bint": "",
+    "harga": 30,
+    "dropRate": 1,
+    "card": "https://rangestudio.wuaze.com/gacha/AKAZA.PNG"
+  }
 }
