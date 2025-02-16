@@ -20,4 +20,11 @@
    dropRate: 1,
    card: "https://rangestudio.wuaze.com/gacha/DOMA.PNG"
  },
+   AKAZA {
+     id: "0244",
+     bint: "",
+     harga: 30,
+     dropRate: 1,
+     card: "https://rangestudio.wuaze.com/gacha/AKAZA.PNG"
+   }
 }
