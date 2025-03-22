@@ -4,20 +4,20 @@
     "bint": "★★★★★",
     "harga": 30,
     "dropRate": 5,
-    "card": "https://rangestudio.wuaze.com/gacha/TENGEN.png"
+    "card": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/gambar-ds/TENGEN.png"
   },
   "AOI": {
     "id": "0218",
     "bint": "★★★",
     "harga": 14,
     "dropRate": 80,
-    "card": "raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/gambar-ds/AOI.PNG"
+    "card": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/gambar-ds/AOI.PNG"
   },
   "DOMA ( UPPER MOON 2 )": {
     "id": "0072",
     "bint": "★★★★★",
     "harga": 30,
     "dropRate": 1,
-    "card": "raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/gambar-ds/DOMA.PNG"
+    "card": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/gambar-ds/DOMA.PNG"
   }
 }
