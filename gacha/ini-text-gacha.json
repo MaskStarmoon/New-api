@@ -54,5 +54,40 @@
     "harga": 22,
     "dropRate": 40,
     "card": "https://rangestudio.wuaze.com/gacha/ENMU.PNG"
+  },
+  "GYOMEI HIMEJIMA": {
+    "id": "0032",
+    "bint": "★★★★★",
+    "harga": 30,
+    "dropRate": 0.2,
+    "card": ""
+  },
+  "": {
+    "id": "",
+    "bint": "★★★★",
+    "harga": ,
+    "dropRate": ,
+    "card": ""
+  },
+  "": {
+    "id": "",
+    "bint": "★★★★",
+    "harga": ,
+    "dropRate": ,
+    "card": ""
+  },
+  "": {
+    "id": "",
+    "bint": "★★★★",
+    "harga": ,
+    "dropRate": ,
+    "card": ""
+  },
+  "": {
+    "id": "",
+    "bint": "★★★★",
+    "harga": ,
+    "dropRate": ,
+    "card": ""
   }
 }
