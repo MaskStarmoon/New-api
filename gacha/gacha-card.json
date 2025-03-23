@@ -10,7 +10,7 @@
     "id": "0218",
     "bint": "★★★",
     "harga": 14,
-    "dropRate": 80,
+    "dropRate": 90,
     "card": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/gambar-ds/AOI.png"
   },
   "DOMA ( UPPER MOON 2 )": {
@@ -22,7 +22,7 @@
   },
   "AKAZA": {
     "id": "0244",
-    "bint": "",
+    "bint": "★★★★★",
     "harga": 30,
     "dropRate": 1,
     "card": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/gambar-ds/AKAZA.PNG"
