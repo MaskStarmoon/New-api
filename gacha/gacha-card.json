@@ -1,86 +1,201 @@
 {
-  "TENGEN UZUI": {
-    "id": "0021",
-    "bint": "★★★★★",
-    "harga": 30,
-    "dropRate": 8,
-    "card": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/gambar-ds/TENGEN.png"
-  },
-  "AOI": {
-    "id": "0218",
-    "bint": "★★★",
-    "harga": 14,
-    "dropRate": 90,
-    "card": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/gambar-ds/AOI.png"
-  },
-  "DOMA ( UPPER MOON 2 )": {
-    "id": "0072",
-    "bint": "★★★★★",
-    "harga": 30,
-    "dropRate": 0.5,
-    "card": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/gambar-ds/DOMA.PNG"
-  },
-  "AKAZA": {
-    "id": "0244",
-    "bint": "★★★★★",
-    "harga": 30,
-    "dropRate": 2,
-    "card": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/gambar-ds/AKAZA.PNG"
-  },
-  "DAKI ( UPPER MOON 6 )": {
-    "id": "0177",
-    "bint": "★★★★★",
-    "harga": 30,
-    "dropRate": 12,
-    "card": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/gambar-ds/DAKI.PNG"
-  },
-  "GENYA SINAZUGAWA": {
-    "id": "0217",
-    "bint": "★★★",
-    "harga": 14,
-    "dropRate": 40,
-    "card": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/gambar-ds/GENYA.PNG"
-  },
-  "GIYU TOMIOKA": {
-    "id": "0092",
-    "bint": "★★★★★",
-    "harga": 35,
-    "dropRate": 1,
-    "card": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/gambar-ds/GIYU.PNG"
-  },
-  "ENMU ( LOWER MOONN 1 )": {
-    "id": "088",
-    "bint": "★★★★",
-    "harga": 22,
-    "dropRate": 70,
-    "card": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/gambar-ds/ENMU.PNG"
-  },
-  "GYOMEI HIMEJIMA": {
-    "id": "0032",
-    "bint": "★★★★★",
-    "harga": 30,
-    "dropRate": 0.2,
-    "card": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/gambar-ds/GYOMEI.png"
-  },
-  "GYOKO ( UPPER MOON 5 )": {
-    "id": "0223",
-    "bint": "★★★★★",
-    "harga": 30,
-    "dropRate": 6,
-    "card": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/gambar-ds/GYOKO.PNG"
-  },
-  "HOTARU HAGANEZUKA": {
-    "id": "0216",
-    "bint": "★★★",
-    "harga": 14,
-    "dropRate": 80,
-    "card": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/gambar-ds/HAGANEZUKA.PNG"
-  },
-  "HANTENGU ( UPPER MOON 4 )": {
-    "id": "0222",
-    "bint": "★★★★★",
-    "harga": 30,
-    "dropRate": 4,
-    "card": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/gambar-ds/HANTENGU.PNG"
-  }
-}
+  "KAGAYA UBUYASHIKI & TSUKUMA UBUYASHIKI": {
+    "id": "0000",
+    "bint": "★★★★★★",
+    "harga": 100,
+    "dropRate": 0.1,
+    "card": "https://rangestudio.wuaze.com/gacha/KAGAYA_&_TSUKUMA.PNG"
+  },
+  "MUZAN KIBUTSUJI": {
+    "id": "0005",
+    "bint": "★★★★★★",
+    "harga": 80,
+    "dropRate": 0.5,
+    "card": "https://rangestudio.wuaze.com/gacha/MUZAN.PNG"
+  },
+  "INOSUKE HASHIBIRA": {
+    "id": "0003",
+    "bint": "★★★★★★",
+    "harga": 80,
+    "dropRate": 0.5,
+    "card": "https://rangestudio.wuaze.com/gacha/INOSUKE.PNG"
+  },
+  "NEZUKO": {
+    "id": "0004",
+    "bint": "★★★★★★",
+    "harga": 80,
+    "dropRate": 0.5,
+    "card": "https://rangestudio.wuaze.com/gacha/NEZUKO.PNG"
+  },
+  "ZENITSU AGATSUMA": {
+    "id": "0002",
+    "bint": "★★★★★★",
+    "harga": 80,
+    "dropRate": 0.5,
+    "card": "https://rangestudio.wuaze.com/gacha/ZENITSU.PNG"
+  },
+  "TANJIROU KAMADO": {
+    "id": "0001",
+    "bint": "★★★★★★",
+    "harga": 80,
+    "dropRate": 0.5,
+    "card": "https://rangestudio.wuaze.com/gacha/TANJIRO.PNG"
+  },
+  "SHINOBU KOCHO": {
+    "id": "0044",
+    "bint": "★★★★★",
+    "harga": 30,
+    "dropRate": 20.1,
+    "card": "https://rangestudio.wuaze.com/gacha/SHINOBU.PNG"
+  },
+  "OBANAI IGURO": {
+    "id": "0089",
+    "bint": "★★★★★",
+    "harga": 29.1,
+    "dropRate": 20.1,
+    "card": "https://rangestudio.wuaze.com/gacha/OBANAI.PNG"
+  },
+  "GIYU TOMIOKA": {
+    "id": "0092",
+    "bint": "★★★★★",
+    "harga": 29.1,
+    "dropRate": 20.1,
+    "card": "https://rangestudio.wuaze.com/gacha/GIYU.PNG"
+  },
+  "TOKITO MUICHIRO": {
+    "id": "0020",
+    "bint": "★★★★★",
+    "harga": 29.1,
+    "dropRate": 20.1,
+    "card": "https://rangestudio.wuaze.com/gacha/TOKITO.PNG"
+  },
+  "MITSURI KANROJI": {
+    "id": "0022",
+    "bint": "★★★★★",
+    "harga": 29.1,
+    "dropRate": 20.1,
+    "card": "https://rangestudio.wuaze.com/gacha/KANROJI.PNG"
+  },
+  "KOKUSHIBO": {
+    "id": "0007",
+    "bint": "★★★★★★",
+    "harga": 79.1,
+    "dropRate": 0.5,
+    "card": "https://rangestudio.wuaze.com/gacha/KOKUSHIBO.PNG"
+  },
+  "TENGEN UZUI": {
+    "id": "0021",
+    "bint": "★★★★★",
+    "harga": 29.1,
+    "dropRate": 20.1,
+    "card": "https://rangestudio.wuaze.com/gacha/TENGEN.PNG"
+  },
+  "GYOMEI HIMEJIMA": {
+    "id": "0032",
+    "bint": "★★★★★",
+    "harga": 29.1,
+    "dropRate": 20.1,
+    "card": "https://rangestudio.wuaze.com/gacha/GYOMEI.PNG"
+  },
+"KOKUSHIBO": {
+    "id": "0007",
+    "bint": "★★★★★★",
+    "harga": 80,
+    "dropRate": 0.5,
+    "card": "https://rangestudio.wuaze.com/gacha/KOKUSHIBO.PNG"
+  },
+"MUKAGO (LOWER MOON 4)": {
+    "id": "0170",
+    "bint": "★★★★",
+    "harga": 22,
+    "dropRate": 50.1,
+    "card": "https://rangestudio.wuaze.com/gacha/MUKAGO.PNG"
+  },
+"SANEMI SHINAZUGAWA": {
+    "id": "0121",
+    "bint": "★★★★★",
+    "harga": 29.1,
+    "dropRate": 20.1,
+    "card": "https://rangestudio.wuaze.com/gacha/SANEMI.PNG"
+  },
+"DOMA UPER MOON 2)": {
+    "id": "0072",
+    "bint": "★★★★★",
+    "harga": 29.1,
+    "dropRate": 20.1,
+    "card": "https://rangestudio.wuaze.com/gacha/DOMA.PNG"
+  },
+"AKAZA (UPER MOON 3)": {
+    "id": "0244",
+    "bint": "★★★★★",
+    "harga": 29.1,
+    "dropRate": 20.1,
+    "card": "https://rangestudio.wuaze.com/gacha/AKAZA.PNG"
+  },
+"NAKIME (UPER MOON 4)": {
+    "id": "0101",
+    "bint": "★★★★★",
+    "harga": 29.1,
+    "dropRate": 20.1,
+    "card": "https://rangestudio.wuaze.com/gacha/NAKIME.PNG"
+  },
+"ENMU (LOWER MOON 1)": {
+    "id": "0032",
+    "bint": "★★★★",
+    "harga": 22,
+    "dropRate": 50.1,
+    "card": "https://rangestudio.wuaze.com/gacha/ENMU.PNG"
+  },
+"ROKURO (LOWER MOON 2)": {
+    "id": "0054",
+    "bint": "★★★★",
+    "harga": 22,
+    "dropRate": 50.1,
+    "card": "https://rangestudio.wuaze.com/gacha/ROKURO.PNG"
+  },
+"WAKURABA (LOWER MOON 3)": {
+    "id": "0182",
+    "bint": "★★★★",
+    "harga": 22,
+    "dropRate": 50.1,
+    "card": "https://rangestudio.wuaze.com/gacha/WAKURABA.PNG"
+  },
+"MAKOMO": {
+    "id": "0212",
+    "bint": "★★★",
+    "harga": 13.1,
+    "dropRate": 89.1,
+    "card": "https://rangestudio.wuaze.com/gacha/MAOMO.PNG"
+  },
+"SABITO": {
+    "id": "0211",
+    "bint": "★★★",
+    "harga": 13.1,
+    "dropRate": 89.1,
+    "card": "https://rangestudio.wuaze.com/gacha/SABITO.PNG"
+  },
+"TAMAYO": {
+    "id": "0032",
+    "bint": "★★★",
+    "harga": 13.1,
+    "dropRate": 89.1,
+    "card": "https://rangestudio.wuaze.com/gacha/TAMAYO.PNG"
+  },
+"YUSHIRO": {
+    "id": "0214",
+    "bint": "★★★",
+    "harga": 13.1,
+    "dropRate": 89.1,
+    "card": "https://rangestudio.wuaze.com/gacha/YUSHIRO.PNG"
+  },
+
+
+
+
+
+
+
+
+
+
+
