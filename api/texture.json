@@ -1,0 +1,54 @@
+{
+  "head": {
+    "right": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/mini-bloxd-char/right-head.png",
+    "left": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/mini-bloxd-char/left-head.png",
+    "top": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/mini-bloxd-char/top-head.png",
+    "bottom": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/mini-bloxd-char/buttom-head.png",
+    "front": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/mini-bloxd-char/face-head.png",
+    "back": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/mini-bloxd-char/top-head.png"
+  },
+  "body": {
+    "right": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/mini-bloxd-char/side-body.png",
+    "left": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/mini-bloxd-char/side-body.png",
+    "top": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/mini-bloxd-char/tp-body.png",
+    "bottom": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/mini-bloxd-char/tp-body.png",
+    "front": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/mini-bloxd-char/front-body.png",
+    "back": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/mini-bloxd-char/back-body.png"
+  },
+  "arm": {
+    "base": {
+      "right": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/mini-bloxd-char/side-arm.png",
+      "left": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/mini-bloxd-char/side-arm.png",
+      "top": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/mini-bloxd-char/top-arm.png",
+      "bottom": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/mini-bloxd-char/buttom-arm.png",
+      "front": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/mini-bloxd-char/side-arm.png",
+      "back": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/mini-bloxd-char/side-arm.png"
+    },
+    "overlay": {
+      "right": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/mini-bloxd-char/overlay-arm.png",
+      "left": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/mini-bloxd-char/overlay-arm.png",
+      "top": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/mini-bloxd-char/overlay-buttom-arm.png",
+      "bottom": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/mini-bloxd-char/overlay-buttom-arm.png",
+      "front": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/mini-bloxd-char/overlay-back-arm.png",
+      "back": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/mini-bloxd-char/overlay-back-arm.png"
+    }
+  },
+  "leg": {
+    "base": {
+      "right": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/mini-bloxd-char/side-arm.png",
+      "left": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/mini-bloxd-char/side-arm.png",
+      "top": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/mini-bloxd-char/top-arm.png",
+      "bottom": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/mini-bloxd-char/buttom-arm.png",
+      "front": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/mini-bloxd-char/side-arm.png",
+      "back": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/mini-bloxd-char/side-arm.png"
+    },
+    "overlay": {
+      "right": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/mini-bloxd-char/overlay-arm.png",
+      "left": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/mini-bloxd-char/overlay-arm.png",
+      "top": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/mini-bloxd-char/overlay-buttom-arm.png",
+      "bottom": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/mini-bloxd-char/overlay-buttom-arm.png",
+      "front": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/mini-bloxd-char/overlay-back-arm.png",
+      "back": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/mini-bloxd-char/overlay-back-arm.png"
+    }
+  }
+}
