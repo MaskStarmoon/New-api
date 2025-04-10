@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>Endless Desert Run</title>
+  <style>
+    body { margin: 0; overflow: hidden; font-family: monospace; color: white; }
+    #score { position: absolute; top: 10px; left: 10px; font-size: 24px; background: rgba(0,0,0,0.5); padding: 10px; border-radius: 5px; z-index: 1; }
+    #gameOver, #credits {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      background: rgba(0,0,0,0.8); padding: 20px; font-size: 24px; text-align: center; display: none;
+    }
+    #controls {
+      position: absolute; bottom: 20px; width: 100%; text-align: center; display: flex; justify-content: center; gap: 40px;
+    }
+    .btn {
+      background: rgba(0, 0, 0, 0.6); color: white; padding: 15px 25px; font-size: 20px; border: none; border-radius: 10px;
+      touch-action: manipulation;
+    }
+  </style>
+</head>
+<body>
+  <audio id="bgm" loop>
+  <source src="http://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/api/Wildflowers-chosic.com_.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+<div id="score">Score: 000.000.000</div>  
+<div id="gameOver">Game Over<br>Tap/Press to Restart</div>
+<div id="credits">Selamat kamu telah membuang waktu mu selama 2 jam<br><i>Congratulations, you've wasted 2 hours of your life - from Developer</i></div>
+<div id="controls">
+  <button class="btn" id="leftBtn">⟵</button>
+  <button class="btn" id="rightBtn">⟶</button>
+</div>
+  <!-- Di index.html kamu -->
+<div id="donasi" style="
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 999;
+  background-color: white;
+  padding: 8px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  text-align: center;
+">
+  <h2 style="font-size: 16px; margin: 0 0 0px;">Dukung Pembuat Game!</h2>
+  <a href="https://trakteer.id/Saveng-Fox/tip" target="_blank">
+    <button style="padding:8px 16px; font-size:14px; background-color:#ffc107; border:none; border-radius:5px; cursor: pointer;">
+      💛 Donation via Trakteer
+    </button>
+  </a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
+<script>
+  let scene = new THREE.Scene();
+  let camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+  let renderer = new THREE.WebGLRenderer();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(renderer.domElement);
+
+  let score = 0, startTime = Date.now(), isGameOver = false;
+  const scoreElement = document.getElementById('score');
+  const gameOverElement = document.getElementById('gameOver');
+  const creditsElement = document.getElementById('credits');
+
+  // Karakter bergaya GTA simpel
+  const characterGroup = new THREE.Group();
+  const bodyMaterial = new THREE.MeshBasicMaterial({ color: 0x8B4513 });
+
+  const head = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), bodyMaterial);
+  head.position.set(0, 2.5, 0);
+
+  const body = new THREE.Mesh(new THREE.BoxGeometry(1, 2, 0.5), bodyMaterial);
+  body.position.set(0, 1.6, 0);
+
+  // Mata
+  const leftEye = new THREE.Mesh(new THREE.CircleGeometry(0.1, 16), new THREE.MeshBasicMaterial({ color: 0xffffff }));
+  leftEye.position.set(-0.2, 0.2, 0.26);
+  const rightEye = new THREE.Mesh(new THREE.CircleGeometry(0.1, 16), new THREE.MeshBasicMaterial({ color: 0xffffff }));
+  rightEye.position.set(0.2, 0.2, 0.26);
+  const leftPupil = new THREE.Mesh(new THREE.CircleGeometry(0.05, 16), new THREE.MeshBasicMaterial({ color: 0x000000 }));
+  leftPupil.position.set(-0.2, 0.2, 0.27);
+  const rightPupil = new THREE.Mesh(new THREE.CircleGeometry(0.05, 16), new THREE.MeshBasicMaterial({ color: 0x000000 }));
+  rightPupil.position.set(0.2, 0.2, 0.27);
+
+  const face = new THREE.Group();
+  face.add(leftEye, rightEye, leftPupil, rightPupil);
+  face.position.set(0, 2.5, 0.5);
+
+  // Tangan dan kaki
+  const leftArm = new THREE.Mesh(new THREE.BoxGeometry(0.3, 1.5, 0.3), bodyMaterial);
+  const rightArm = new THREE.Mesh(new THREE.BoxGeometry(0.3, 1.5, 0.3), bodyMaterial);
+  leftArm.position.set(-0.7, 1.5, 0);
+  rightArm.position.set(0.7, 1.5, 0);
+
+  const leftLeg = new THREE.Mesh(new THREE.BoxGeometry(0.4, 1.5, 0.4), bodyMaterial);
+  const rightLeg = new THREE.Mesh(new THREE.BoxGeometry(0.4, 1.5, 0.4), bodyMaterial);
+  leftLeg.position.set(-0.3, 0, 0);
+  rightLeg.position.set(0.3, 0, 0);
+
+  characterGroup.add(head, body, face, leftArm, rightArm, leftLeg, rightLeg);
+  scene.add(characterGroup);
+
+  // Buat dua segmen ground dan road untuk scrolling loop
+let groundSegments = [];
+let roadSegments = [];
+
+for (let i = 0; i < 2; i++) {
+  let g = new THREE.Mesh(new THREE.PlaneGeometry(500, 500), new THREE.MeshBasicMaterial({ color: 0xC2B280 }));
+  g.rotation.x = -Math.PI / 2;
+  g.position.z = -i * 500;
+  scene.add(g);
+  groundSegments.push(g);
+
+  let r = new THREE.Mesh(new THREE.PlaneGeometry(10, 500), new THREE.MeshBasicMaterial({ color: 0x333333 }));
+  r.rotation.x = -Math.PI / 2;
+  r.position.set(0, 0.01, -i * 500);
+  scene.add(r);
+  roadSegments.push(r);
+}
+
+  let mountains = [];
+  for (let i = 0; i < 10; i++) {
+    let m = new THREE.Mesh(new THREE.ConeGeometry(10, 30, 8), new THREE.MeshBasicMaterial({ color: 0x888888 }));
+    m.position.set((Math.random() < 0.5 ? -20 : 20) + Math.random() * 10, 15, -i * 50);
+    scene.add(m);
+    mountains.push(m);
+  }
+
+  let obstacles = [];
+  function spawnObstacle() {
+    const count = Math.floor(Math.random() * 3) + 1;
+    for (let i = 0; i < count; i++) {
+      let o = new THREE.Mesh(new THREE.BoxGeometry(1, 2, 1), new THREE.MeshBasicMaterial({ color: 0xff0000 }));
+      o.position.set((Math.floor(Math.random() * 5) - 2) * 2, 1, camera.position.z - 50);
+      scene.add(o);
+      obstacles.push(o);
+    }
+  }
+
+  setInterval(spawnObstacle, 1000);
+  camera.position.set(0, 5, 10);
+  camera.lookAt(characterGroup.position);
+
+  function updateScore() {
+    const elapsed = Date.now() - startTime;
+    score = Math.min(Math.floor(elapsed / (2 * 60 * 60 * 1000) * 999999999), 999999999);
+    scoreElement.innerText = 'Score: ' + score.toString().padStart(9, '0');
+    if (score >= 999999999) endGame(true);
+  }
+
+  function checkCollision() {
+    for (let obs of obstacles) {
+      if (obs.position.distanceTo(characterGroup.position) < 1.5) {
+        endGame();
+      }
+    }
+  }
+
+  function endGame(isWin = false) {
+    isGameOver = true;
+    if (isWin) {
+      creditsElement.style.display = 'block';
+    } else {
+      gameOverElement.style.display = 'block';
+    }
+  }
+
+  function resetGame() {
+    location.reload();
+  }
+
+  // Play background music when game starts
+  const bgm = document.getElementById('bgm');
+  window.addEventListener('load', () => {
+    bgm.volume = 0.5; // atur volume sesuai kebutuhan
+    bgm.play().catch(err => {
+      console.warn("Autoplay mungkin diblokir oleh browser:", err);
+    });
+  });
+
+
+  window.addEventListener('click', () => { if (isGameOver) resetGame(); /* if (bgm.paused) bgm.play(); */ });
+  window.addEventListener('keydown', (e) => {
+    if (isGameOver) resetGame();
+    if (e.key === 'ArrowLeft' && characterGroup.position.x > -4) characterGroup.position.x -= 2;
+    if (e.key === 'ArrowRight' && characterGroup.position.x < 4) characterGroup.position.x += 2;
+  });
+
+  document.getElementById('leftBtn').addEventListener('click', () => {
+    if (characterGroup.position.x > -4) characterGroup.position.x -= 2;
+  });
+  document.getElementById('rightBtn').addEventListener('click', () => {
+    if (characterGroup.position.x < 4) characterGroup.position.x += 2;
+  });
+
+  let runAngle = 0;
+
+  function animate() {
+    if (!isGameOver) {
+      requestAnimationFrame(animate);
+
+      // animasi kaki dan tangan
+      runAngle += 0.4;
+      leftLeg.rotation.x = Math.sin(runAngle) * 0.5;
+      rightLeg.rotation.x = -Math.sin(runAngle) * 0.5;
+      leftArm.rotation.x = -Math.sin(runAngle) * 0.5;
+      rightArm.rotation.x = Math.sin(runAngle) * 0.5;
+
+      characterGroup.position.z -= 0.2;
+      camera.position.z = characterGroup.position.z + 10;
+      // Loop ground & road
+for (let g of groundSegments) {
+  if (characterGroup.position.z - g.position.z < -500) {
+    g.position.z -= 1000;
+  }
+}
+for (let r of roadSegments) {
+  if (characterGroup.position.z - r.position.z < -500) {
+    r.position.z -= 1000;
+  }
+}
+      for (let obs of obstacles) obs.position.z += 0.2;
+      updateScore();
+      checkCollision();
+    }
+    renderer.render(scene, camera);
+  }
+
+  animate();
+</script>
+</body>
+</html>
