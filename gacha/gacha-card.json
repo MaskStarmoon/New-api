@@ -82,5 +82,33 @@
     "harga": 30,
     "dropRate": 4,
     "card": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/gambar-ds/HANTENGU.PNG"
+  },
+  "OBANAI IGURO": {
+    "id": "0089",
+    "bint": "★★★★★",
+    "harga": 30,
+    "dropRate": 0.2,
+    "card": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/gambar-ds/Obanai-Iguro.png"
+  },
+  "SHINOBU KOCHO": {
+    "id": "0044",
+    "bint": "★★★★★",
+    "harga": 30,
+    "dropRate": 0.4,
+    "card": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/gambar-ds/Shinobu-Kocho.png"
+  },
+  "ZENITSU AGATSUMA ( INSINE DROPRATE : 0.1 )": {
+    "id": "0002",
+    "bint": "★★★★★",
+    "harga": 80,
+    "dropRate": 0.1,
+    "card": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/gambar-ds/Zenitsu.png"
+  },
+  "Kokushibo ( WHAT?, CARD RATE ONLY : 0.1, HOW YOU GET IT? )": {
+    "id": "0007",
+    "bint": "★★★★★",
+    "harga": 80,
+    "dropRate": 0.1,
+    "card": "https://raw.githubusercontent.com/MaskStarmoon/New-api/refs/heads/main/gambar-ds/Kokushibo.png"
   }
 }
